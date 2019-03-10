@@ -22,7 +22,7 @@ def getDHTdata():
 	DHTpin = 16
 	hum, temp = Adafruit_DHT.read_retry(DHT22Sensor, DHTpin)
 
-	if hum is not None and temp is not None:
+	if hum is not None and temp is not None and hum < 100:
 		hum = round(hum)
 		temp = round(temp, 1)
 	return temp, hum
