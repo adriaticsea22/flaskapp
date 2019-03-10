@@ -48,6 +48,7 @@ def getCircuitdata():
 	ser.reset_input_buffer()
 	lightlevel = float(ser.readline().decode())
 	return lightlevel
+	
 
 
 # log sensor data on database
