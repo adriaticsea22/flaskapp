@@ -67,7 +67,7 @@ if (numSamples > 101):
 @app.route("/")
 def index():
 
-	time, temp, hum = getLastData()
+	time, temp, hum, light = getLastData()
 	templateData = {
 	  'time'		: time,
       'temp'		: temp,
