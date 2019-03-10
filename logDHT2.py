@@ -46,7 +46,7 @@ def getCircuitdata():
 	lightlevel = float(ser.readline().decode())
 	ser.close()
 	return lightlevel
-	
+
 
 
 # log sensor data on database
@@ -59,7 +59,7 @@ curs=conn.cursor()
 curs.execute("INSERT INTO DHT_data values(datetime('now'), (?), (?))", (temp, hum))
 try:
 	lightlevel = getCircuitdata()
-	curs.execute("INSERT INTO circuit_data values(datetime('now'), (?)", (lightlevel,))
+	curs.execute("INSERT INTO circuit_data values(datetime('now'), (?))", (lightlevel,))
 	print("success")
 except:
 	pass
