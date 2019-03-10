@@ -2,12 +2,12 @@
 # -*- coding: utf-8 -*-
 #
 #  appDHT_v1.py
-#  
-#  Created by MJRoBot.org 
+#
+#  Created by MJRoBot.org
 #  10Jan18
 
 '''
-	RPi WEb Server for DHT captured data with Graph plot  
+	RPi WEb Server for DHT captured data with Graph plot
 '''
 
 
@@ -28,8 +28,10 @@ def getLastData():
 		time = str(row[0])
 		temp = row[1] * 1.8 + 32
 		hum = row[2]
+	for row in curs.execute("SELECT * FROM circuit_data ORDER BY timestamp DESC LIMIT 1"):
+		light = row[1]
 	#conn.close()
-	return time, temp, hum
+	return time, temp, hum, light
 
 
 def getHistData (numSamples):
@@ -38,11 +40,16 @@ def getHistData (numSamples):
 	dates = []
 	temps = []
 	hums = []
+	lights = []
 	for row in reversed(data):
 		dates.append(row[0])
 		temps.append(row[1] * 1.8 + 32)
 		hums.append(row[2])
-	return dates, temps, hums
+	curs.execute("SELECT * FROM circuit_data ORDER BY timestamp DESC LIMIT "+str(numSamples))
+	data = curs.fetchall()
+	for row in reversed(data):
+		lights.append(row[1])
+	return dates, temps, hums, lights
 
 def maxRowsTable():
 	for row in curs.execute("select COUNT(temp) from  DHT_data"):
@@ -54,17 +61,18 @@ global numSamples
 numSamples = maxRowsTable()
 if (numSamples > 101):
 	numSamples = 100
-	
-	
-# main route 
+
+
+# main route
 @app.route("/")
 def index():
-	
+
 	time, temp, hum = getLastData()
 	templateData = {
 	  'time'		: time,
       'temp'		: temp,
       'hum'			: hum,
+	  'light'		: light,
       'numSamples'	: numSamples
 	}
 	return render_template('index.html', **templateData)
@@ -72,23 +80,24 @@ def index():
 
 @app.route('/', methods=['POST'])
 def my_form_post():
-    global numSamples 
+    global numSamples
     numSamples = int (request.form['numSamples'])
     numMaxSamples = maxRowsTable()
     if (numSamples > numMaxSamples):
         numSamples = (numMaxSamples-1)
-    
-    time, temp, hum = getLastData()
-    
+
+    time, temp, hum, light = getLastData()
+
     templateData = {
 	  'time'		: time,
       'temp'		: temp,
       'hum'			: hum,
+	  'light'		: light,
       'numSamples'	: numSamples
 	}
     return render_template('index.html', **templateData)
-	
-	
+
+
 @app.route('/plot/temp')
 def plot_temp():
 	times, temps, hums = getHistData(numSamples)
@@ -125,6 +134,23 @@ def plot_hum():
 	response.mimetype = 'image/png'
 	return response
 
+@app.route('/plot/light')
+def plot_light():
+	times, temps, hums, lights = getHistData(numSamples)
+	ys = lights
+	fig = Figure()
+	axis = fig.add_subplot(1, 1, 1)
+	axis.set_title("Light lvel")
+	axis.set_xlabel("Samples")
+	axis.grid(True)
+	xs = range(numSamples)
+	axis.plot(xs, ys)
+	canvas = FigureCanvas(fig)
+	output = io.BytesIO()
+	canvas.print_png(output)
+	response = make_response(output.getvalue())
+	response.mimetype = 'image/png'
+	return response
+
 if __name__ == "__main__":
    app.run(host='0.0.0.0', port=80, debug=False)
-
