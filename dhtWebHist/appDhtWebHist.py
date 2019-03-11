@@ -122,13 +122,17 @@ def my_form_post():
 def plot_temp():
 	times, temps, hums = getHistData(numSamples)
 	ys = temps
-	times = list(map(datetime.datetime.strptime, times, len(times)*['%Y-%m-%d']))
+	timec = []
+	for thing in times:
+		timec.append(datetime.datetime.strptime(thing, "%Y-%m-%d %H:%M:%S"))
+
 	fig = Figure()
 	axis = fig.add_subplot(1, 1, 1)
 	axis.set_title("Temperature [°F]")
 	axis.set_xlabel("Samples")
 	axis.grid(True)
-	xs = times
+
+	xs = timec
 	axis.plot(xs, ys)
 #	axis.set_xticklabels(times, xs, rotation=45)
 	canvas = FigureCanvas(fig)
