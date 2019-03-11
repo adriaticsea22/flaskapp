@@ -136,7 +136,7 @@ def plot_temp():
 
 	xs = timec
 	plt.setp(axis.xaxis.get_majorticklabels(), rotation=45)
-	plt.gcf().subplots_adjust(bottom=0.15)
+	plt.gcf().subplots_adjust(bottom=0.25)
 	axis.plot(xs, ys)
 #	axis.set_xticklabels(rotation=45)
 	canvas = FigureCanvas(fig)
