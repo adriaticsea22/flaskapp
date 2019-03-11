@@ -10,7 +10,8 @@
 	RPi WEb Server for DHT captured data with Graph plot
 '''
 
-
+import matplotlib
+matplotlib.use('Agg')
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib import dates
 from matplotlib.figure import Figure
