@@ -69,7 +69,7 @@ def maxRowsTableCircuit():
 	return maxNumberRowsCircuit
 
 #initialize global variables
-global numSamples
+global numSamples, numSamplesCircuit
 numSamples = maxRowsTable()
 numSamplesCircuit = maxRowsTableCircuit()
 if (numSamples > 101):
@@ -96,7 +96,7 @@ def index():
 
 @app.route('/', methods=['POST'])
 def my_form_post():
-	global numSamples
+	global numSamples, numSamplesCircuit
 	numSamples = int(request.form['numSamples'])
 	numSamplesCircuit = numSamples
 	numMaxSamples = maxRowsTable()
@@ -164,6 +164,8 @@ def plot_hum():
 
 @app.route('/plot/light')
 def plot_light():
+	numMaxSamplesCircuit = maxRowsTableCircuit()
+#	if numSamples < numMaxSamplesCircuit
 	times, lights = getHistDataCircuit(numSamplesCircuit)
 	ys = lights
 	fig = Figure()
