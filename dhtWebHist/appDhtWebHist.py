@@ -133,12 +133,12 @@ def plot_temp():
 	fig = Figure()
 	axis = fig.add_subplot(1, 1, 1)
 	axis.set_title("Temperature [°F]")
-	axis.set_xlabel("Samples")
+	axis.set_xlabel("Time of day")
 	axis.grid(True)
 
 	xs = timec
 	plt.setp(axis.xaxis.get_majorticklabels(), rotation=45)
-	plt.gcf().subplots_adjust(bottom=0.25)
+#	plt.gcf().subplots_adjust(bottom=0.25)
 	axis.plot(xs, ys)
 #	axis.set_xticklabels(rotation=45)
 	canvas = FigureCanvas(fig)
@@ -152,12 +152,16 @@ def plot_temp():
 def plot_hum():
 	times, temps, hums = getHistData(numSamples)
 	ys = hums
+	timec = []
+	for thing in times:
+		timec.append(datetime.datetime.strptime(thing, "%Y-%m-%d %H:%M:%S"))
 	fig = Figure()
 	axis = fig.add_subplot(1, 1, 1)
 	axis.set_title("Humidity [%]")
-	axis.set_xlabel("Samples")
+	axis.set_xlabel("Time of day")
 	axis.grid(True)
-	xs = range(numSamples)
+	xs = timec
+	plt.setp(axis.xaxis.get_majorticklabels(), rotation=45)
 	axis.plot(xs, ys)
 	canvas = FigureCanvas(fig)
 	output = io.BytesIO()
