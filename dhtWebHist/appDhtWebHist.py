@@ -133,8 +133,9 @@ def plot_temp():
 	axis.grid(True)
 
 	xs = timec
+	fig.setp(axis.xaxis.get_majorticklabels(), rotation=45)
 	axis.plot(xs, ys)
-	axis.set_xticklabels(rotation=45)
+#	axis.set_xticklabels(rotation=45)
 	canvas = FigureCanvas(fig)
 	output = io.BytesIO()
 	canvas.print_png(output)
