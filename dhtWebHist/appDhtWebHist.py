@@ -12,6 +12,7 @@
 
 
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib import dates
 from matplotlib.figure import Figure
 import io
 
@@ -120,14 +121,15 @@ def my_form_post():
 def plot_temp():
 	times, temps, hums = getHistData(numSamples)
 	ys = temps
+	times = dates.date2num(times)
 	fig = Figure()
 	axis = fig.add_subplot(1, 1, 1)
 	axis.set_title("Temperature [°F]")
 	axis.set_xlabel("Samples")
 	axis.grid(True)
-	xs = range(numSamples)
+	xs = times
 	axis.plot(xs, ys)
-	axis.set_xticklabels(times, xs, rotation=45)
+#	axis.set_xticklabels(times, xs, rotation=45)
 	canvas = FigureCanvas(fig)
 	output = io.BytesIO()
 	canvas.print_png(output)
