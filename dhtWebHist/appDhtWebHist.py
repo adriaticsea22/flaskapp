@@ -14,6 +14,7 @@
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib import dates
 from matplotlib.figure import Figure
+from matplotlib import pyplot as plt
 import io
 import datetime
 
@@ -133,7 +134,7 @@ def plot_temp():
 	axis.grid(True)
 
 	xs = timec
-	fig.setp(axis.xaxis.get_majorticklabels(), rotation=45)
+	plt.setp(axis.xaxis.get_majorticklabels(), rotation=45)
 	axis.plot(xs, ys)
 #	axis.set_xticklabels(rotation=45)
 	canvas = FigureCanvas(fig)
