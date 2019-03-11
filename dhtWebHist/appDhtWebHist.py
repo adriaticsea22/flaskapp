@@ -125,8 +125,9 @@ def plot_temp():
 	axis.set_title("Temperature [°F]")
 	axis.set_xlabel("Samples")
 	axis.grid(True)
-	xs = times
+	xs = range(numSamples)
 	axis.plot(xs, ys)
+	axis.xticks(xs, times)
 	canvas = FigureCanvas(fig)
 	output = io.BytesIO()
 	canvas.print_png(output)
