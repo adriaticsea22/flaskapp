@@ -12,6 +12,8 @@
 
 import matplotlib
 matplotlib.use('Agg')
+from matplotlib import rcParams
+rcParams.update({'figure.autolayout': True})
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib import dates
 from matplotlib.figure import Figure
