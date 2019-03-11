@@ -99,7 +99,7 @@ def my_form_post():
 	numMaxSamples = maxRowsTable()
 	numMaxSamplesCircuit = maxRowsTableCircuit()
 	if (numSamples > numMaxSamples):
-    	numSamples = (numMaxSamples-1)
+		numSamples = (numMaxSamples-1)
 	if (numSamplesCircuit > numMaxSamplesCircuit):
 		numSamplesCircuit = (numMaxSamplesCircuit -1)
 
