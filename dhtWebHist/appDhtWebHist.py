@@ -121,7 +121,7 @@ def my_form_post():
 def plot_temp():
 	times, temps, hums = getHistData(numSamples)
 	ys = temps
-	times = dates.datestr2num(times)
+	times = list(map(datetime.datetime.strptime, times, len(times)*['%Y-%m-%d']))
 	fig = Figure()
 	axis = fig.add_subplot(1, 1, 1)
 	axis.set_title("Temperature [°F]")
