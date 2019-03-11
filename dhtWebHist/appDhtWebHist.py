@@ -127,7 +127,7 @@ def plot_temp():
 	axis.grid(True)
 	xs = range(numSamples)
 	axis.plot(xs, ys)
-	axis.set_xticklabels(xs)
+	axis.set_xticklabels(times)
 	canvas = FigureCanvas(fig)
 	output = io.BytesIO()
 	canvas.print_png(output)
