@@ -183,7 +183,7 @@ def plot_light():
 	axis.set_title("Light level")
 	axis.set_xlabel("Time of day")
 	axis.grid(True)
-	xs = timec
+	xs = times
 	plt.setp(axis.xaxis.get_majorticklabels(), rotation=90)
 	axis.plot(xs, ys)
 	canvas = FigureCanvas(fig)
