@@ -40,27 +40,39 @@ def getHistData (numSamples):
 	dates = []
 	temps = []
 	hums = []
-	lights = []
 	for row in reversed(data):
 		dates.append(row[0])
 		temps.append(row[1] * 1.8 + 32)
 		hums.append(row[2])
-	curs.execute("SELECT * FROM circuit_data ORDER BY timestamp DESC LIMIT "+str(numSamples))
+	return dates, temps, hums
+
+def getHistDataCircuit (numSamplesCircuit):
+	curs.execute("SELECT * FROM DHT_data ORDER BY timestamp DESC LIMIT "+str(numSamplesCircuit))
 	data = curs.fetchall()
+	dates2 = []
+	lights = []
 	for row in reversed(data):
 		lights.append(row[1])
-	return dates, temps, hums, lights
+	return dates2, lights
 
 def maxRowsTable():
 	for row in curs.execute("select COUNT(temp) from  DHT_data"):
 		maxNumberRows=row[0]
 	return maxNumberRows
 
+def maxRowsTableCircuit():
+	for row in curs.execute("select COUNT(light) from  circuit_data"):
+		maxNumberRowsCircuit=row[0]
+	return maxNumberRowsCircuit
+
 #initialize global variables
 global numSamples
 numSamples = maxRowsTable()
+numSamplesCircuit = maxRowsTableCircuit()
 if (numSamples > 101):
 	numSamples = 100
+if (numSamplesCircuit > 101):
+	numSamplesCircuit = 100
 
 
 # main route
@@ -73,7 +85,8 @@ def index():
       'temp'		: temp,
       'hum'			: hum,
 	  'light'		: light,
-      'numSamples'	: numSamples
+      'numSamples'	: numSamples,
+	  'numSamplesCircuit' : numSamplesCircuit
 	}
 	return render_template('index.html', **templateData)
 
@@ -82,9 +95,13 @@ def index():
 def my_form_post():
     global numSamples
     numSamples = int (request.form['numSamples'])
+	numSamplesCircuit = numSamples
     numMaxSamples = maxRowsTable()
+	numMaxSamplesCircuit = maxRowsTableCircuit()
     if (numSamples > numMaxSamples):
         numSamples = (numMaxSamples-1)
+	if (numSamplesCircuit > numMaxSamplesCircuit):
+		numSamplesCircuit = (numMaxSamplesCircuit -1)
 
     time, temp, hum, light = getLastData()
 
@@ -93,14 +110,15 @@ def my_form_post():
       'temp'		: temp,
       'hum'			: hum,
 	  'light'		: light,
-      'numSamples'	: numSamples
+      'numSamples'	: numSamples,
+	  'numSamplesCircuit' : numSamplesCircuit
 	}
     return render_template('index.html', **templateData)
 
 
 @app.route('/plot/temp')
 def plot_temp():
-	times, temps, hums, lights = getHistData(numSamples)
+	times, temps, hums = getHistData(numSamples)
 	ys = temps
 	fig = Figure()
 	axis = fig.add_subplot(1, 1, 1)
@@ -118,7 +136,7 @@ def plot_temp():
 
 @app.route('/plot/hum')
 def plot_hum():
-	times, temps, hums, lights = getHistData(numSamples)
+	times, temps, hums = getHistData(numSamples)
 	ys = hums
 	fig = Figure()
 	axis = fig.add_subplot(1, 1, 1)
@@ -136,14 +154,14 @@ def plot_hum():
 
 @app.route('/plot/light')
 def plot_light():
-	times, temps, hums, lights = getHistData(numSamples)
+	times, lights = getHistData(numSamplesCircuit)
 	ys = lights
 	fig = Figure()
 	axis = fig.add_subplot(1, 1, 1)
 	axis.set_title("Light lvel")
 	axis.set_xlabel("Samples")
 	axis.grid(True)
-	xs = range(numSamples)
+	xs = range(numSamplesCircuit)
 	axis.plot(xs, ys)
 	canvas = FigureCanvas(fig)
 	output = io.BytesIO()
