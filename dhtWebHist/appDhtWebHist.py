@@ -58,6 +58,7 @@ def getHistDataCircuit (numSamplesCircuit):
 	dates2 = []
 	lights = []
 	for row in reversed(data):
+		dates2.append(row[0])
 		lights.append(row[1])
 	return dates2, lights
 
@@ -183,7 +184,7 @@ def plot_light():
 	axis.set_title("Light level")
 	axis.set_xlabel("Time of day")
 	axis.grid(True)
-	xs = times
+	xs = timec
 	plt.setp(axis.xaxis.get_majorticklabels(), rotation=90)
 	axis.plot(xs, ys)
 	canvas = FigureCanvas(fig)
