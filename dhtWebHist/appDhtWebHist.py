@@ -47,7 +47,7 @@ def getHistData (numSamples):
 	return dates, temps, hums
 
 def getHistDataCircuit (numSamplesCircuit):
-	curs.execute("SELECT * FROM DHT_data ORDER BY timestamp DESC LIMIT "+str(numSamplesCircuit))
+	curs.execute("SELECT * FROM circuit_data ORDER BY timestamp DESC LIMIT "+str(numSamplesCircuit))
 	data = curs.fetchall()
 	dates2 = []
 	lights = []
