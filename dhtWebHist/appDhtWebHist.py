@@ -154,11 +154,11 @@ def plot_hum():
 
 @app.route('/plot/light')
 def plot_light():
-	times, lights = getHistData(numSamplesCircuit)
+	times, lights = getHistDataCircuit(numSamplesCircuit)
 	ys = lights
 	fig = Figure()
 	axis = fig.add_subplot(1, 1, 1)
-	axis.set_title("Light lvel")
+	axis.set_title("Light level")
 	axis.set_xlabel("Samples")
 	axis.grid(True)
 	xs = range(numSamplesCircuit)
