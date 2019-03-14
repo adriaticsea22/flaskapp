@@ -16,4 +16,12 @@ def uv_read():
     UV_B = veml.uvb
     return UV_index, UV_A, UV_B
 
-print(uv_read)
+
+
+
+def log_data():
+    UV_index, UV_A, UV_B = uv_read()
+    aio.send('UV index', UV_index)
+    aio.send('UV A', UV_A)
+    aio.send('UV B', UV_B)
+    print('success')
