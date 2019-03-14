@@ -21,7 +21,9 @@ def uv_read():
 
 def log_data():
     UV_index, UV_A, UV_B = uv_read()
-    aio.send('UV index', UV_index)
-    aio.send('UV A', UV_A)
-    aio.send('UV B', UV_B)
+    aio.send('uv-index', UV_index)
+    aio.send('uv-a', UV_A)
+    aio.send('uv-b', UV_B)
     print('success')
+
+log_data()
