@@ -26,7 +26,7 @@ def lux_read():
 def bme_read():
     temperature = bme280.temperature * 1.8 + 32
     humidity = bme280.humidity
-    pressure = bme.pressure
+    pressure = bme280.pressure
     return temperature, humidity, pressure
 
 
