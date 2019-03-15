@@ -67,7 +67,7 @@ def log_data():
     aio.send('uv-index', UV_index)
     aio.send('uv-a', UV_A)
     aio.send('uv-b', UV_B)
-    aio.send('lux', visible_light)
+    aio.send('lux', light_level)
     aio.send('indoor-temperature', temperature)
     aio.send('indoor-humidity', humidity)
     aio.send('indoor-pressure', pressure)
