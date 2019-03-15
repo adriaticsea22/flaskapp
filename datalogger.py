@@ -5,11 +5,39 @@ import busio
 import adafruit_tsl2591
 import adafruit_bme280
 import adafruit_veml6075
+import os
+import glob
+import time
+
+os.system('modprobe w1-gpio')
+os.system('modprobe w1-therm')
+
+base_dir = '/sys/bus/w1/devices/'
+device_folder = glob.glob(base_dir + '28*')[0]
+device_file = device_folder + '/w1_slave'
 
 i2c = busio.I2C(board.SCL, board.SDA)
 veml = adafruit_veml6075.VEML6075(i2c, integration_time=800)
 lux = adafruit_tsl2591.TSL2591(i2c)
 bme280 = adafruit_bme280.Adafruit_BME280_I2C(i2c)
+
+def out_temp_raw():
+    f = open(device_file, 'r')
+    lines = f.readlines()
+    f.close()
+    return lines
+
+def out_temp():
+    lines = out_temp_raw()
+    while lines[0].strip()[-3:] != 'YES':
+        time.sleep(0.2)
+        lines = read_temp_raw()
+    equals_pos = lines[1].find('t=')
+    if equals_pos != -1:
+        temp_string = lines[1][equals_pos+2:]
+        temp_c = float(temp_string) / 1000.0
+        temp_f = temp_c * 9.0 / 5.0 + 32.0
+        return temp_c, temp_f
 
 def uv_read():
     UV_index = veml.uv_index
