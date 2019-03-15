@@ -11,6 +11,8 @@ import time
 import sqlite3
 from Adafruit_IO import Client
 
+aio = Client('adriangamador', '936cda57b84f404ab7b883364fba3b6e')
+
 
 dbname='sensorsData.db'
 sampleFreq = 60 # time in seconds
