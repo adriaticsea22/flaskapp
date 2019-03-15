@@ -19,6 +19,7 @@ device_file = device_folder + '/w1_slave'
 i2c = busio.I2C(board.SCL, board.SDA)
 veml = adafruit_veml6075.VEML6075(i2c, integration_time=800)
 lux = adafruit_tsl2591.TSL2591(i2c)
+lux.GAIN_LOW
 bme280 = adafruit_bme280.Adafruit_BME280_I2C(i2c)
 
 def out_temp_raw():
