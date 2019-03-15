@@ -62,6 +62,7 @@ def log_data():
     UV_index, UV_A, UV_B = uv_read()
     light_level, visible_light, infrared = lux_read()
     temperature, humidity, pressure = bme_read()
+    out_temp_c, out_temp_f = out_temp()
     aio.send('uv-index', UV_index)
     aio.send('uv-a', UV_A)
     aio.send('uv-b', UV_B)
@@ -69,6 +70,7 @@ def log_data():
     aio.send('indoor-temperature', temperature)
     aio.send('indoor-humidity', humidity)
     aio.send('indoor-pressure', pressure)
+    aio.send('outdoor-temperature', out_temp_f)
     print('success')
 
 log_data()
