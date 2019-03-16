@@ -8,6 +8,9 @@ import adafruit_veml6075
 import os
 import glob
 import time
+import digitalio
+import adafruit_mcp3xxx.mcp3008 as MCP
+from adafruit_mcp3xxx.analog_in import AnalogIn
 
 os.system('modprobe w1-gpio')
 os.system('modprobe w1-therm')
@@ -21,6 +24,12 @@ veml = adafruit_veml6075.VEML6075(i2c, integration_time=800)
 lux = adafruit_tsl2591.TSL2591(i2c)
 adafruit_tsl2591.GAIN_LOW
 bme280 = adafruit_bme280.Adafruit_BME280_I2C(i2c)
+
+spi = busio.SPI(clock=board.SCK, MISO=board.MISO, MOSI=board.MOSI)
+cs = digitalio.DigitalInOut(board.D22)
+mcp=MCP.MCP3000(spi, cs)
+loglight = AnalogIn(mcp, MCP.P1)
+gas = AnalogIn(mcp, MCP.P0)
 
 def out_temp_raw():
     f = open(device_file, 'r')
@@ -72,6 +81,8 @@ def log_data():
     aio.send('indoor-humidity', humidity)
     aio.send('indoor-pressure', pressure)
     aio.send('outdoor-temperature', out_temp_f)
+    aio.send('log-light', loglight.value)
+    aio.send('gas-sensor', gas.value)
     print('success')
 
 log_data()
