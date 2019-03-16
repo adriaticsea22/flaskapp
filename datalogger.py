@@ -27,7 +27,7 @@ bme280 = adafruit_bme280.Adafruit_BME280_I2C(i2c)
 
 spi = busio.SPI(clock=board.SCK, MISO=board.MISO, MOSI=board.MOSI)
 cs = digitalio.DigitalInOut(board.D22)
-mcp=MCP.MCP3000(spi, cs)
+mcp = MCP.MCP3008(spi, cs)
 loglight = AnalogIn(mcp, MCP.P1)
 gas = AnalogIn(mcp, MCP.P0)
 
