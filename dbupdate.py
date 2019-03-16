@@ -36,8 +36,10 @@ uv_index = aio.receive('uv-index')
 uv_index = uv_index.value
 loglight = aio.receive('log-light')
 loglight = loglight.value
+print('success 1')
 gas = aio.receive('gas-sensor')
 gas = gas.value
+print('success 2')
 
 
 conn=sqlite3.connect(dbname)
@@ -69,12 +71,14 @@ except:
 
 try:
 	curs.execute("INSERT INTO loglight values(datetime('now'), (?))", (loglight,))
+	print('success 3')
 
 except:
 	pass
 
 try:
 	curs.execute("INSERT INTO gas values(datetime('now'), (?))", (gas,))
+	print('success 4')
 
 except:
 	pass
