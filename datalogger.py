@@ -85,13 +85,16 @@ def log_data():
     r = requests.post(url_string, data=data_string)
     aio.send('indoor-temperature', temperature)
     data_string = 'temperature,device=bm280,location=inside value={}'.format(temperature)
-    r = requests.post(url_string, data=data_string)
+    if temperature > 0:
+        r = requests.post(url_string, data=data_string)
     aio.send('indoor-humidity', humidity)
     data_string = 'humidity,device=bme280,location=inside value={}'.format(humidity)
-    r = requests.post(url_string, data=data_string)
+    if humidity > 10:
+        r = requests.post(url_string, data=data_string)
     aio.send('indoor-pressure', pressure)
     data_string = 'pressure,device=bme280,location=inside value={}'.format(pressure)
-    r = requests.post(url_string, data=data_string)
+    if pressure > 750:
+        r = requests.post(url_string, data=data_string)
     aio.send('outdoor-temperature', out_temp_f)
     data_string = 'temperature,device=ds18,location=outside value={}'.format(out_temp_f)
     if out_temp_f > -30 and out_temp_f < 120:
