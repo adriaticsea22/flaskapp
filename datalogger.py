@@ -42,7 +42,7 @@ def out_temp():
     lines = out_temp_raw()
     while lines[0].strip()[-3:] != 'YES':
         time.sleep(0.2)
-        lines = read_temp_raw()
+        lines = out_temp_raw()
     equals_pos = lines[1].find('t=')
     if equals_pos != -1:
         temp_string = lines[1][equals_pos+2:]
@@ -94,7 +94,8 @@ def log_data():
     r = requests.post(url_string, data=data_string)
     aio.send('outdoor-temperature', out_temp_f)
     data_string = 'temperature,device=ds18,location=outside value={}'.format(out_temp_f)
-    r = requests.post(url_string, data=data_string)
+    if out_temp_f > -30 and out_temp_f < 120:
+        r = requests.post(url_string, data=data_string)
     aio.send('log-light', loglight.value)
     data_string = 'light,device=loglight,location=inside value={}'.format(loglight.value)
     r = requests.post(url_string, data=data_string)
