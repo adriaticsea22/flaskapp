@@ -11,9 +11,12 @@ import time
 import digitalio
 import adafruit_mcp3xxx.mcp3008 as MCP
 from adafruit_mcp3xxx.analog_in import AnalogIn
+import requests
 
 os.system('modprobe w1-gpio')
 os.system('modprobe w1-therm')
+
+client = InfluxDBClient(host='192.168.1.179', port=8086, database='sensordb')
 
 base_dir = '/sys/bus/w1/devices/'
 device_folder = glob.glob(base_dir + '28*')[0]
@@ -69,11 +72,13 @@ def bme_read():
 
 
 def log_data():
+    url_string = 'http://192.168.1.179:8086/write?db=sensordb'
     UV_index, UV_A, UV_B = uv_read()
     light_level, visible_light, infrared = lux_read()
     temperature, humidity, pressure = bme_read()
     out_temp_c, out_temp_f = out_temp()
     aio.send('uv-index', UV_index)
+
     aio.send('uv-a', UV_A)
     aio.send('uv-b', UV_B)
     aio.send('lux', light_level)
@@ -81,8 +86,12 @@ def log_data():
     aio.send('indoor-humidity', humidity)
     aio.send('indoor-pressure', pressure)
     aio.send('outdoor-temperature', out_temp_f)
+    data_string = 'temperature,device=ds18,location=outside value={}'.format(out_temp_f)
+    r = requests.post(url_string, data=data_string)
     aio.send('log-light', loglight.value)
     aio.send('gas-sensor', gas.value)
+
+
     print('success')
 
 log_data()
