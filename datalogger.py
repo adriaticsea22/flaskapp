@@ -92,7 +92,7 @@ def log_data():
             "measurement": "temperature",
             "tags": {
                 "device": "ds18",
-                "location": "inside"
+                "location": "outside"
             },
             "fields": {
                 "value": float(out_temp_f)
