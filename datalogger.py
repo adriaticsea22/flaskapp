@@ -157,7 +157,7 @@ def log_data():
             "fields": {
                 "value": gas.value
             }
-        }}
+        }
     ]
     client.write_points(datapoints)
     aio.send('uv-index', UV_index)
