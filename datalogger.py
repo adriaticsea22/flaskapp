@@ -85,7 +85,7 @@ def log_data():
                 "location": "inside"
             },
             "fields": {
-                "value": temperature
+                "value": float(temperature)
             }
         },
         {
@@ -95,7 +95,7 @@ def log_data():
                 "location": "inside"
             },
             "fields": {
-                "value": out_temp_f
+                "value": float(out_temp_f)
             }
         },
         {
@@ -105,7 +105,7 @@ def log_data():
                 "location": "inside"
             },
             "fields": {
-                "value": UV_index
+                "value": float(UV_index)
             }
         },
         {
@@ -115,7 +115,7 @@ def log_data():
                 "location": "inside"
             },
             "fields": {
-                "value": light_level
+                "value": float(light_level)
             }
         },
         {
@@ -125,7 +125,7 @@ def log_data():
                 "location": "inside"
             },
             "fields": {
-                "value": humidity
+                "value": float(humidity)
             }
         },
         {
@@ -135,7 +135,7 @@ def log_data():
                 "location": "inside"
             },
             "fields": {
-                "value": pressure
+                "value": float(pressure)
             }
         },
         {
@@ -145,7 +145,7 @@ def log_data():
                 "location": "inside"
             },
             "fields": {
-                "value": loglight.value
+                "value": float(loglight.value)
             }
         },
         {
@@ -155,7 +155,7 @@ def log_data():
                 "location": "inside"
             },
             "fields": {
-                "value": gas.value
+                "value": float(gas.value)
             }
         }
     ]
