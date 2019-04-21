@@ -11,10 +11,7 @@ import time
 import digitalio
 import adafruit_mcp3xxx.mcp3008 as MCP
 from adafruit_mcp3xxx.analog_in import AnalogIn
-from influxdb import InfluxDBClient
-
-client = InfluxDBClient(host='192.168.1.179', port=8086)
-client.switch_database('sensordb')
+import requests
 
 os.system('modprobe w1-gpio')
 os.system('modprobe w1-therm')
@@ -73,103 +70,42 @@ def bme_read():
 
 
 def log_data():
+    url_string = 'http://192.168.1.179:8086/write?db=sensordb'
     UV_index, UV_A, UV_B = uv_read()
     light_level, visible_light, infrared = lux_read()
     temperature, humidity, pressure = bme_read()
     out_temp_c, out_temp_f = out_temp()
-    datapoints = [
-        {
-            "measurement": "temperature",
-            "tags": {
-                "device": "bm280",
-                "location": "inside"
-            },
-            "fields": {
-                "value": temperature
-            }
-        },
-        {
-            "measurement": "temperature",
-            "tags": {
-                "device": "ds18",
-                "location": "inside"
-            },
-            "fields": {
-                "value": out_temp_f
-            }
-        },
-        {
-            "measurement": "uv-index",
-            "tags": {
-                "device": "veml",
-                "location": "inside"
-            },
-            "fields": {
-                "value": UV_index
-            }
-        },
-        {
-            "measurement": "light",
-            "tags": {
-                "device": "lux",
-                "location": "inside"
-            },
-            "fields": {
-                "value": light_level
-            }
-        },
-        {
-            "measurement": "humidity",
-            "tags": {
-                "device": "bm280",
-                "location": "inside"
-            },
-            "fields": {
-                "value": humidity
-            }
-        },
-        {
-            "measurement": "pressure",
-            "tags": {
-                "device": "bm280",
-                "location": "inside"
-            },
-            "fields": {
-                "value": pressure
-            }
-        },
-        {
-            "measurement": "light",
-            "tags": {
-                "device": "loglight",
-                "location": "inside"
-            },
-            "fields": {
-                "value": loglight.value
-            }
-        },
-        {
-            "measurement": "VOC",
-            "tags": {
-                "device": "gassensor",
-                "location": "inside"
-            },
-            "fields": {
-                "value": gas.value
-            }
-        }}
-    ]
-    client.write_points(datapoints)
     aio.send('uv-index', UV_index)
+    data_string = 'uv-index,device=veml,location=inside value={}'.format(UV_index)
+    r = requests.post(url_string, data=data_string)
     aio.send('uv-a', UV_A)
     aio.send('uv-b', UV_B)
     aio.send('lux', light_level)
+    data_string = 'light,device=lux,location=inside value={}'.format(light_level)
+    r = requests.post(url_string, data=data_string)
     aio.send('indoor-temperature', temperature)
+    data_string = 'temperature,device=bm280,location=inside value={}'.format(temperature)
+    if temperature > 0:
+        r = requests.post(url_string, data=data_string)
     aio.send('indoor-humidity', humidity)
+    data_string = 'humidity,device=bme280,location=inside value={}'.format(humidity)
+    if humidity > 10:
+        r = requests.post(url_string, data=data_string)
     aio.send('indoor-pressure', pressure)
+    data_string = 'pressure,device=bme280,location=inside value={}'.format(pressure)
+    if pressure > 750:
+        r = requests.post(url_string, data=data_string)
     aio.send('outdoor-temperature', out_temp_f)
+    data_string = 'temperature,device=ds18,location=outside value={}'.format(out_temp_f)
+    if out_temp_f > -30 and out_temp_f < 120:
+        r = requests.post(url_string, data=data_string)
     aio.send('log-light', loglight.value)
+    data_string = 'light,device=loglight,location=inside value={}'.format(loglight.value)
+    r = requests.post(url_string, data=data_string)
     aio.send('gas-sensor', gas.value)
+    data_string = 'VOC,device=gassensor,location=inside value={}'.format(gas.value)
+    r = requests.post(url_string, data=data_string)
+
 
     print('success')
 
