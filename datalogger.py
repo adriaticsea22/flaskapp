@@ -13,8 +13,12 @@ import adafruit_mcp3xxx.mcp3008 as MCP
 from adafruit_mcp3xxx.analog_in import AnalogIn
 from influxdb import InfluxDBClient
 
-client = InfluxDBClient(host='192.168.1.179', port=8086)
-client.switch_database('sensordb')
+try:
+    client = InfluxDBClient(host='192.168.1.179', port=8086)
+    client.switch_database('sensordb')
+except:
+    print("Couldn't connect to influxdb")
+    pass
 
 os.system('modprobe w1-gpio')
 os.system('modprobe w1-therm')
@@ -159,7 +163,11 @@ def log_data():
             }
         }
     ]
-    client.write_points(datapoints)
+    try:
+        client.write_points(datapoints)
+    except:
+        print("Couldn't write to influxdb")
+        pass
     aio.send('uv-index', UV_index)
     aio.send('uv-a', UV_A)
     aio.send('uv-b', UV_B)
