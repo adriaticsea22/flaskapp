@@ -20,7 +20,7 @@ except:
     print("Couldn't connect to influxdb")
     pass
 
-clientweb = InfluxDBClient(host='67.205.147.13', port=8086)
+clientweb = InfluxDBClient(host='67.205.147.13', port=8086, username='admin', password='Imadog22')
 clientweb.switch_database('sensordb')
 
 os.system('modprobe w1-gpio')
