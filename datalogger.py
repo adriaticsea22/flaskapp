@@ -20,6 +20,9 @@ except:
     print("Couldn't connect to influxdb")
     pass
 
+clientweb = InfluxDBClient(host='http://67.205.147.13', port=8086)
+clientweb.switch_database('sensordb')
+
 os.system('modprobe w1-gpio')
 os.system('modprobe w1-therm')
 
@@ -168,6 +171,7 @@ def log_data():
     except:
         print("Couldn't write to influxdb")
         pass
+    clientweb.write_points(datapoints)
     aio.send('uv-index', UV_index)
     aio.send('uv-a', UV_A)
     aio.send('uv-b', UV_B)
