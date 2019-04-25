@@ -81,7 +81,10 @@ def bme_read():
 
 def log_data():
     UV_index, UV_A, UV_B = uv_read()
-    light_level, visible_light, infrared = lux_read()
+    try:
+        light_level, visible_light, infrared = lux_read()
+    except:
+        light_level=3000
     temperature, humidity, pressure = bme_read()
     out_temp_c, out_temp_f = out_temp()
     datapoints = [
@@ -172,7 +175,7 @@ def log_data():
         print("Couldn't write to influxdb")
         pass
     clientweb.write_points(datapoints)
-    aio.send('uv-index', UV_index)
+"""     aio.send('uv-index', UV_index)
     aio.send('uv-a', UV_A)
     aio.send('uv-b', UV_B)
     aio.send('lux', light_level)
@@ -181,7 +184,7 @@ def log_data():
     aio.send('indoor-pressure', pressure)
     aio.send('outdoor-temperature', out_temp_f)
     aio.send('log-light', loglight.value)
-    aio.send('gas-sensor', gas.value)
+    aio.send('gas-sensor', gas.value) """
 
     print('success')
 
