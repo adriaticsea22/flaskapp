@@ -175,16 +175,16 @@ def log_data():
         print("Couldn't write to influxdb")
         pass
     clientweb.write_points(datapoints)
-"""     aio.send('uv-index', UV_index)
-    aio.send('uv-a', UV_A)
-    aio.send('uv-b', UV_B)
-    aio.send('lux', light_level)
-    aio.send('indoor-temperature', temperature)
-    aio.send('indoor-humidity', humidity)
-    aio.send('indoor-pressure', pressure)
-    aio.send('outdoor-temperature', out_temp_f)
-    aio.send('log-light', loglight.value)
-    aio.send('gas-sensor', gas.value) """
+    # aio.send('uv-index', UV_index)
+    # aio.send('uv-a', UV_A)
+    # aio.send('uv-b', UV_B)
+    # aio.send('lux', light_level)
+    # aio.send('indoor-temperature', temperature)
+    # aio.send('indoor-humidity', humidity)
+    # aio.send('indoor-pressure', pressure)
+    # aio.send('outdoor-temperature', out_temp_f)
+    # aio.send('log-light', loglight.value)
+    # aio.send('gas-sensor', gas.value)
 
     print('success')
 
